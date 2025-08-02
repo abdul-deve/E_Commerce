@@ -1,10 +1,13 @@
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from config.settings import EMAIL_HOST_USER
+from datetime import datetime
 
-def opt_verification_email(user_email, user_name):
-    html_content = render_to_string('email_templates/otp_verification', {
-        'user_name': user_name
+def opt_verification_email(user_email, user_name, otp):
+    html_content = render_to_string('email_templates/otp_verification.html', {
+        'user_name': user_name,
+        'otp': otp,
+        'year': datetime.now().year,
     })
 
     email = EmailMessage(
@@ -15,4 +18,3 @@ def opt_verification_email(user_email, user_name):
     )
     email.content_subtype = 'html'
     email.send()
-

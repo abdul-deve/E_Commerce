@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/common/__init__.py;/home/abdul-mateen/E_Commerce/common/decorators.py;/home/abdul-mateen/E_Commerce/common/models.py;/home/abdul-mateen/E_Commerce/config/__init__.py;/home/abdul-mateen/E_Commerce/config/asgi.py;/home/abdul-mateen/E_Commerce/config/settings.py;/home/abdul-mateen/E_Commerce/config/urls.py;/home/abdul-mateen/E_Commerce/config/wsgi.py;/home/abdul-mateen/E_Commerce/user_auth/migrations/0001_initial.py;/home/abdul-mateen/E_Commerce/user_auth/migrations/__init__.py;/home/abdul-mateen/E_Commerce/user_auth/__init__.py;/home/abdul-mateen/E_Commerce/user_auth/admin.py;/home/abdul-mateen/E_Commerce/user_auth/apps.py;/home/abdul-mateen/E_Commerce/user_auth/email.py;/home/abdul-mateen/E_Commerce/user_auth/models.py;/home/abdul-mateen/E_Commerce/user_auth/tests.py;/home/abdul-mateen/E_Commerce/user_auth/views.py;/home/abdul-mateen/E_Commerce/manage.py" />
+  </component>
+</project>

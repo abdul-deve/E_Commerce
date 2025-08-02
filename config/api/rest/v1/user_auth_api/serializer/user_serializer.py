@@ -1,3 +1,4 @@
+from django.template.context_processors import request
 from rest_framework import serializers
 
 from django.contrib.auth import authenticate,get_user_model
@@ -8,7 +9,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = PendingUser
         fields = "__all__"
-        read_only_fields =  ["created_at","updated_at"]
+        read_only_fields =  ["created_at","updated_at", "otp","is_verified"]
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -29,9 +30,23 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def create(self, **validated_data):
-        pending_user = PendingUser.objects.create(**validated_data)
+    def create(self, validated_data):
+        email = validated_data["email"]
+        pending_user = PendingUser.objects.filter(email=email).first()
+        if pending_user:
+            for attr, value in validated_data.items():
+                setattr(pending_user, attr, value)
+                pending_user.set_otp()
+            pending_user.save()
+        else:
+            pending_user = PendingUser.objects.create(**validated_data)
+
+        pending_user.set_otp()
         return pending_user
+
+
+
+
 
 
 
