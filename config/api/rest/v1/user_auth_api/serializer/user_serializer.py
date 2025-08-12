@@ -1,4 +1,3 @@
-from django.template.context_processors import request
 from rest_framework import serializers
 
 from django.contrib.auth import authenticate,get_user_model

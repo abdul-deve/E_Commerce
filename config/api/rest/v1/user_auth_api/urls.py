@@ -1,6 +1,13 @@
 from config.api.rest.v1.user_auth_api.views.user_vewis import RegisterAPI
 from config.api.rest.v1.user_auth_api.views.otp_views import  verify_otp
 from config.api.rest.v1.user_auth_api.views.social_views import GoogleLogin,SocialLoginView
+from config.api.rest.v1.user_auth_api.views.user_info_views import AddressViewSet,UserProfileViewSet
+
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register('profile', UserProfileViewSet, basename='profile')
+router.register('address', AddressViewSet, basename='address')
+
 
 from django.urls import path,include
 from rest_framework_simplejwt.views import (
@@ -15,4 +22,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('social/', SocialLoginView.as_view(), name='social_login'),
     path('social/google/', GoogleLogin.as_view(), name='google_login'),
+    path('', include(router.urls)),
+
+
 ]

@@ -120,7 +120,7 @@ class UserProfile(TimeStampUniqueID, models.Model):
         abstract = False
 
 class Address(TimeStampUniqueID, models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,editable=False,related_name="user_address")
     country = models.CharField(max_length=250, db_index=True)
     state = models.CharField(max_length=250, db_index=True)
     city = models.CharField(max_length=250, db_index=True)
@@ -131,3 +131,5 @@ class Address(TimeStampUniqueID, models.Model):
 
     def __str__(self):
         return f" Country: {self.country} State: {self.state} City: {self.city} Street:{self.street} "
+
+

@@ -8,6 +8,7 @@ from config.api.rest.v1.store.serializers.admin_end__serializers import (Categor
                                                                          InventorySerializer,
                                                                          ProductImageSerializer)
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework import  status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import action
@@ -28,3 +29,5 @@ class ProductViewSet(ModelViewSet):
     authentication_classes = []
 
 
+    def get_permissions(self):
+        pass
