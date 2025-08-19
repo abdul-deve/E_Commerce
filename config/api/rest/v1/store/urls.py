@@ -1,12 +1,14 @@
-
-from django.urls import path,include
+from django.urls import path, include
+from .views.views import EmployeeViewSet,ProductViewSet,CategoryViewSet
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet,CategoryViewSet
 router = DefaultRouter()
-router.register("product",ProductViewSet,basename="products")
-router.register("category",CategoryViewSet,basename="category")
-
+router.register("employee",EmployeeViewSet,"employees")
+router.register("category",CategoryViewSet,"category")
+router.register("product",ProductViewSet,"product")
 urlpatterns = [
-    path('', include(router.urls)),
+    path("",include(router.urls))
+
+
+
 
 ]

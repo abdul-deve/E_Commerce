@@ -1,1 +1,1 @@
-from  .admin_end_views import *
+from  .views import *

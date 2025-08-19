@@ -3,9 +3,6 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
-from django.core.handlers.base import BaseHandler
-from django.conf import settings
-
 load_dotenv()
 
 
@@ -48,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     "common",
     "store",
+    "customer",
 
 
 ]

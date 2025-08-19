@@ -4,14 +4,24 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from uuid import uuid4
 
 from common.otp import generate_otp
 from common.emails import opt_verification_email
-from common.models import TimeStampUniqueID
 from config.api.rest.v1.user_auth_api.email import send_welcome_email
 
 from PIL import Image
 from phonenumber_field.modelfields import PhoneNumberField
+
+class TimeStampUniqueID:
+    id = models.UUIDField(primary_key=True,editable=False,default=uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 
 
 class UserManager(BaseUserManager):
@@ -40,12 +50,11 @@ class PendingUser(TimeStampUniqueID, models.Model):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(blank=True, null=True)
 
-
     def set_otp(self):
         self.otp = generate_otp()
         self.created_at = timezone.now()
         self.save(update_fields=['otp', 'created_at'])
-        opt_verification_email(user_email=self.email, user_name=self.username,otp=self.otp)
+        opt_verification_email(user_email=self.email, user_name=self.username, otp=self.otp)
 
     def validate_otp(self, entered_otp):
         if self.created_at and timezone.now() - self.created_at > timedelta(minutes=5):
@@ -61,21 +70,18 @@ class PendingUser(TimeStampUniqueID, models.Model):
             raise ValidationError("OTP not Verified")
         user_model = get_user_model()
         real_user = user_model.objects.create_user(
-            email = self.email,
-            password = self.password,
-            username = self.username,
+            email=self.email,
+            password=self.password,
+            username=self.username,
         )
         real_user.save()
         return real_user
 
-
-
-    def save(self,*args,**kwargs):
-        super().save(*args,**kwargs)
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
     class Meta:
         abstract = False
-
 
 
 class User(TimeStampUniqueID, AbstractUser):
@@ -83,7 +89,7 @@ class User(TimeStampUniqueID, AbstractUser):
     email = models.EmailField(db_index=True, unique=True)
     is_superuser = models.BooleanField(default=False)
     username = models.CharField(max_length=250, unique=True, db_index=True)
-
+    is_staff = models.BooleanField(default=False)
     objects = UserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ("username",)
@@ -95,11 +101,8 @@ class User(TimeStampUniqueID, AbstractUser):
     def get_email(self):
         return self.email
 
-
-
     class Meta:
         abstract = False
-
 
 
 def validate_image(image):
@@ -112,15 +115,16 @@ def validate_image(image):
 
 
 class UserProfile(TimeStampUniqueID, models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, db_index=True, editable=False, related_name="user_profile")
-    name = models.CharField(max_length=250)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, db_index=True, editable=False,
+                                related_name="user_profile")
     phone_number = PhoneNumberField(region="PK", unique=True, db_index=True)
     profile_pic = models.ImageField(validators=[validate_image])
-    class Meta :
+    class Meta:
         abstract = False
 
+
 class Address(TimeStampUniqueID, models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,editable=False,related_name="user_address")
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, editable=False, related_name="user_address")
     country = models.CharField(max_length=250, db_index=True)
     state = models.CharField(max_length=250, db_index=True)
     city = models.CharField(max_length=250, db_index=True)
@@ -131,5 +135,3 @@ class Address(TimeStampUniqueID, models.Model):
 
     def __str__(self):
         return f" Country: {self.country} State: {self.state} City: {self.city} Street:{self.street} "
-
-
